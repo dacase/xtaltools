@@ -1,10 +1,14 @@
-include ../../config.h
+#  Very simple Makefile.  Change the following flags if needed.
 
-# LOCALFLAGS=-Wno-unused-result
+
+CC = gcc
+CFLAGS = -g -O3 -Wno-unused-result
+LDFLAGS = 
+BINDIR = .
 
 .c.o:
 	@echo "[XTALUTIL]  CC $<"
-	@$(CC) -c $(COPTFLAGS) $(CFLAGS) $(LOCALFLAGS) -o $@ $< 
+	@$(CC) -c $(CFLAGS) -o $@ $< 
 
 OBJS = crdmanip.o grid.o matrix.o pdbRead.o rand2.o topRead.o vector.o
 
@@ -35,7 +39,7 @@ $(BINDIR)/pdb2rdf: pdb2rdf.o $(OBJS)
 	@echo "[XTALUTIL]  CC $@"
 	@$(CC) $(CFLAGS) $(LDFLAGS) -o $@ $^ -lm
 
-uninstall:
+uninstall: clean
 	/bin/rm -f $(BINDIR)/AddToBox $(BINDIR)/ChBox \
        $(BINDIR)/PropPDB $(BINDIR)/UnitCell
 
