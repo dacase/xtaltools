@@ -1,7 +1,8 @@
-# Overview
+# XtalTools Overview
 
-This directory tree contains various X-ray and cryoEM-related code and
-utilities.  Documentation is in the doc/xtaltools.pdf file.  Folder info:
+This directory tree contains various scripts to manipulate periodic
+structures in the context of molecular dynamics or refinement calculations.
+Documentation is in the doc/xtaltools.pdf file.  Folder info:
 
 * src  -- utilities from Dave Cerutti for set up of crystal MD simulations
 * XtalAnalyze  -- utilities from Pawel Janowski for analysis
@@ -24,8 +25,7 @@ respond to requests for support.
 
 # License
 
-This project is licensed under the GNU General Public License, 
-version 2, or (at your option) any later version.   Some components use 
-different, but compatible, open source licenses.  See the LICENSE file 
-for more information.
+This project is licensed under the GNU General Public License, version
+2, or (at your option) any later version.  See the LICENSE file for more
+information.
 
