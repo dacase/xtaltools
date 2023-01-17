@@ -4,7 +4,7 @@ This directory tree contains various X-ray and cryoEM-related code and
 utilities.  Documentation is in the doc/xtaltools.pdf file.  Folder info:
 
 * src  -- utilities from Dave Cerutti for set up of crystal MD simulations
-* XtalAnalyze  -- utilities from Pavel Janowski for analysis
+* XtalAnalyze  -- utilities from Pawel Janowski for analysis
 * ensemble_scripts -- tools for creating supercell ensembles for MD/refinement
 * phenix_scipts  -- builds on phenix for miscellaneous manipulations
 * ccp4_scipts  -- builds on CCP4/refmac for miscellaneous manipulations
