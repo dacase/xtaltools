@@ -2,7 +2,13 @@
 
 This directory tree contains various scripts to manipulate periodic
 structures in the context of molecular dynamics or refinement calculations.
-Documentation is in the doc/xtaltools.pdf file.  Folder info:
+
+Documentation is in the doc/xtaltools.pdf file, which is mainly designed to
+give a roadmap to what is available, and to describe some ways the tools can
+be combined for useful tasks.  Most of the documentation is in the scripts
+themselves.
+
+# Folder info:
 
 * src  -- utilities from Dave Cerutti for set up of crystal MD simulations
 * XtalAnalyze  -- utilities from Pawel Janowski for analysis
@@ -12,10 +18,11 @@ Documentation is in the doc/xtaltools.pdf file.  Folder info:
 
 # Installation
 
-There is nothing really to "install".  Go to the src folder and type "make"
-to generate the executables there.  The bash, perl and python scripts
-generally assume that you will copy the files to a working directory, make
-changes there with an editor, then run.
+There is nothing really to "install".  Go to the src folder and type
+"make" to generate the executables there.  The remaining bash, perl and
+python scripts generally assume that you will copy the files to a working
+directory, make changes there with an editor, then run.  I am working to
+put most of the documentation inside each script.
 
 # Warning
 
