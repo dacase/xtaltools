@@ -4,6 +4,8 @@ use POSIX "fmod";
 
 $model = 0; $first=1;
 
+# get the following lines from get_ucell.F90
+
 # recip matrix, for conversion to fractional coords:
 $r11 =     0.0367107; $r12 =    -0.0000000; $r13 =     0.0000000;
 $r21 =     0.0147502; $r22 =     0.0338155; $r23 =    -0.0000000;
