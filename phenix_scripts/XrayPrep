@@ -1,6 +1,16 @@
 #!/bin/bash
 
-#  prepare Amber and structure factor files needed for xray3-style calculations.
+#  prepare Amber and structure factor files needed for crystallogrphic
+#  refinements using phenix_amber or the msander programs.
+#
+#    phenix_amber is an option inside phenix.refine to use a force field
+#       description instead of Engh-Huber-type distance and angle restraints
+#       to constrain the geometry.
+#
+#    msander does much the same thing, but uses Amber MD code (including
+#       GPU acceleration) to carry out much of the refinement.  This 
+#       program is available at https://github.com/dacase/msander.git.
+#
 #  First input is the pdb-identifier: code assumes that $1-sf.cif
 #      and $1.pdb are  available in the current directory
 #  Second (optional) input would be names of cif files needed by phenix.refine

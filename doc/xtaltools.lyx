@@ -131,12 +131,15 @@
 
 \begin_body
 
-\begin_layout Standard
-\align center
+\begin_layout Title
 
 \series bold
 \size giant
 Xtaltools Reference Manual 
+\end_layout
+
+\begin_layout Author
+David A Case
 \end_layout
 
 \begin_layout Standard
@@ -151,10 +154,197 @@ Xtaltools Reference Manual
 \end_layout
 
 \begin_layout Section
+Overview of XtalTools
+\begin_inset CommandInset label
+LatexCommand label
+name "sec:overview"
+
+\end_inset
+
+
+\end_layout
+
+\begin_layout Standard
+This section gives a bird's-eye view of capabilities of the 
+\emph on
+XtalTools
+\emph default
+ package.
+ The hope is to get more detailed examples and documentation as time permits.
+ The organization is based on the compuational tools required, which almost
+ certainly not the best approach.
+\end_layout
+
+\begin_layout Section
+ccp4_scripts
+\end_layout
+
+\begin_layout Standard
+These scripts are based on the 
+\emph on
+CCP4
+\emph default
+ and 
+\emph on
+refmac5
+\emph default
+ programs.
+\end_layout
+
+\begin_layout Description
+conf_solvent.sh Takes an electron density for the solvent (say from MD simulation
+s or from integral equation models), plus an atomic model for the 
+\begin_inset Quotes eld
+\end_inset
+
+solute
+\begin_inset Quotes erd
+\end_inset
+
+ (generally a macromolecule like a protein), and refines the model with
+ 
+\emph on
+refmac5
+\emph default
+.
+ As a comparison, ignores the input solvent density and uses the standard
+ 
+\emph on
+refmac5 
+\emph default
+bulk solvent contribution, as would be done in a conventional simulation.
+ This offers one way to see if the input density is any 
+\begin_inset Quotes eld
+\end_inset
+
+better
+\begin_inset Quotes erd
+\end_inset
+
+ than the standard solvent contribution.
+\end_layout
+
+\begin_layout Description
+md2diffuse.sh Takes snapshots from an MD simulation, and works through the
+ steps to compute both the Bragg intensities and diffuse intensities.
+ The 
+\emph on
+sfall
+\emph default
+ program is the key engine to compute scattering amplitudes.
+ Special attention is paid to reducing disk space requirements, so that
+ scattering amplitudes from many snapshots can be stored and analyzed.
+ The code optionally will constuct map coefficients and an electron density
+ map arising from the simulation.
+\end_layout
+
+\begin_layout Description
+md2map.sh
+\end_layout
+
+\begin_layout Description
+mdv2map.sh The two scripts compute the average electron density, as a CCP4
+ map and as map coefficients, from an input MD simulation.
+ Unlike the 
+\series bold
+md2diffuse.sh
+\series default
+ script, which computes the average scattering amplitudes, then uses an
+ FFT to obtain the final map, these two scripts directly add the maps together,
+ then uses a Fourier transform to obtain the map coefficients.
+ Since no diffuse scattering information is needed, there is much less need
+ to optimize disk space; still the overall amount of computation is about
+ the same, 
+\emph on
+i.e.
+
+\emph default
+ that required to run 
+\emph on
+sfall
+\emph default
+ on each frame of the input trajectory.
+ The 
+\series bold
+mdv2map.sh
+\series default
+ script assumes that the unit cell dimensions don't change throughout the
+ trajectory, whereas 
+\series bold
+md2map.sh
+\series default
+ does not make this assumption.
+\end_layout
+
+\begin_layout Section
+phenix_scripts
+\end_layout
+
+\begin_layout Description
+XrayPrep
+\end_layout
+
+\begin_layout Description
+CryoPrep These two scripts take an atomic model (in the form of a PDB-format
+ file), and either an electron density (as a CCP4 map) or structure factors
+ (as an sf-cif file), and prepare all the files needed to carry out refinements
+ that employ a molecular force field (rather than Engh-Huber like distance
+ and angle restraints) to constrain the molecular geometry.
+\end_layout
+
+\begin_layout Description
+run_phenix.solvent This is a sample script to allow comparisons of the bulk-solve
+nt model in 
+\emph on
+phenix
+\emph default
+ and a user-supplied solvent density.
+ Unlike the 
+\series bold
+conf_solvent.sh
+\series default
+ script based on 
+\emph on
+refmac5
+\emph default
+, this only works for a single-point, and doesn't carry out refinements
+ that include the user-supplied solvent density.
+\end_layout
+
+\begin_layout Description
+run_phenix_refine This is just an alternative way to run 
+\emph on
+phenix.refine
+\emph default
+ from the command line, with flexible ways to choose the input paramters.
+ It's probably not for everyone.
+\end_layout
+
+\begin_layout Description
+run_fmodel This just runs 
+\emph on
+phenix.fmodel
+\emph default
+ and re-formats the output in a simple but occasionally useful way.
+\end_layout
+
+\begin_layout Section
+ensemble_scripts
+\end_layout
+
+\begin_layout Standard
+These are scripts that are used to run ensemble refinements, where many
+ complete copies of the macromolecule are present, generally arranged in
+ a supercell.
+ These are mainly useful as part of a bigger workflow, whose documentation
+ is not yet ready....
+\end_layout
+
+\begin_layout Section
 Setting up crystal simulations
 \begin_inset CommandInset label
 LatexCommand label
-name "chap:crystals"
+name "sec:crystals"
 
 \end_inset
 

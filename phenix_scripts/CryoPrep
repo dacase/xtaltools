@@ -1,6 +1,16 @@
 #!/bin/bash
 
-#  prepare Amber and structure factor files needed for cryo-em calculations
+#  prepare Amber and structure factor files needed for CryoEM
+#  refinements using the phenix_amber or msander programs.
+#
+#    phenix_amber is an option inside phenix.refine to use a force field
+#       description instead of Engh-Huber-type distance and angle restraints
+#       to constrain the geometry.
+#
+#    msander does much the same thing, but uses Amber MD code (including
+#       GPU acceleration) to carry out much of the refinement.  This 
+#       program is available at https://github.com/dacase/msander.git.
+#
 #  First input is the pdb-identifier: code assumes that $1.pdb is present
 #  Second argument is the electron density map
 #  Third argument is resolution to be used in converting the map to
