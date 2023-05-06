@@ -24,7 +24,7 @@ spacegroup=$3
 if true; then
 #============================================================================
 echo "Running phenix.AmberPrep" 
-phenix.AmberPrep $id.pdb use_reduce=False >> $id-prep.log \
+phenix.AmberPrep $id.pdb use_reduce=False use_amber_library=False >> $id-prep.log \
      || { echo "  phenix.AmberPrep:  Program error"; exit 1; }
 
 /bin/mv 4amber_$id.order ${id}_uc.order
@@ -60,7 +60,7 @@ fi
 
 /bin/rm -f foo.parm7 foo2.parm7  parmed
 
-if false; then
+if true; then
 #============================================================================
 echo "Making input mtz file"
 phenix.cif_as_mtz $id-sf.cif  >> $id-prep.log \
@@ -69,12 +69,13 @@ phenix.cif_as_mtz $id-sf.cif  >> $id-prep.log \
 echo "Running zero-cycle phenix.refine, filter outliers, possibly convert I to F"
 phenix.refine  \
    ${id}.pdb $id-sf.mtz $ciffiles \
-   refinement.input.xray_data.r_free_flags.generate=True \
+   fmodel.xray_data.r_free_flags.generate=True \
    refinement.main.number_of_macro_cycles=0 \
    xray_data.outliers_rejection=True \
    output.write_model_cif_file=False \
-   prefix=cdl serial=1 \
-   write_geo=False cdl=True --overwrite >> $id-prep.log \
+   output.overwrite=True \
+   output.prefix=cdl output.serial=1 \
+   output.write_geo_file=False >> $id-prep.log \
      || { echo "  phenix.refine:  Program error"; exit 1; }
 
 #============================================================================
