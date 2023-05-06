@@ -1,0 +1,63 @@
+#!/usr/bin/perl -n -i.bak
+#
+#   first, read in a pdb file line and unpack
+#
+
+if( $_ =~ /^ATOM|^HETATM/){
+
+#  expand to 80+ characters (really hokey version):
+chop($_);
+$_ .= "                                                                    ";
+
+( $label, $atno, $atname, $alt, $resname, $chainId, $resno, $iCode,
+      $x, $y, $z, $occ, $bfact, $element, $charge ) =
+    unpack("a6 a5 x a4 a a3 x a a4 a x3 a8 a8 a8 a6 a6 x10 a2 a2",$_);
+
+#
+#  do modifications necessary here:
+#
+if    ($resno <=    312 ){ $chainId = "A"; }
+elsif ($resno <=  2*312 ){ $chainId = "B"; }
+elsif ($resno <=  3*312 ){ $chainId = "C"; }
+elsif ($resno <=  4*312 ){ $chainId = "D"; }
+elsif ($resno <=  5*312 ){ $chainId = "E"; }
+elsif ($resno <=  6*312 ){ $chainId = "F"; }
+elsif ($resno <=  7*312 ){ $chainId = "G"; }
+elsif ($resno <=  8*312 ){ $chainId = "H"; }
+elsif ($resno <=  9*312 ){ $chainId = "I"; }
+elsif ($resno <= 10*312 ){ $chainId = "J"; }
+elsif ($resno <= 11*312 ){ $chainId = "K"; }
+elsif ($resno <= 12*312 ){ $chainId = "L"; }
+
+#
+#  write back out
+#
+printf 
+"%6s%5s %-4s%1s%3s %1s%4s%1s   %8.3f%8.3f%8.3f%6.2f%6.2f          %2s%2s\n",
+      $label, $atno,$atname,$alt, $resname,$chainId, $resno, $iCode,
+        $x,$y,$z, $occ, $bfact, $element, $charge;
+
+} elsif( $_ =~ /^ANISOU/){
+#  expand to 80+ characters (really hokey version):
+chop($_);
+$_ .= "                                                                    ";
+
+( $label, $atno, $atname, $alt, $resname, $chainId, $resno, $iCode,
+    $u11, $u22, $u33, $u12, $u13, $u23, $element, $charge ) =
+    unpack("a6 a5 x a4 a a3 x a a4 a x a7 a7 a7 a7 a7 a7 x6 a2 a2",$_);
+
+#
+#  do modifications necessary here:
+#
+
+#
+#  write back out
+#
+printf 
+"%6s%5s %-4s%1s%3s %1s%4s%1s %7s%7s%7s%7s%7s%7s      %2s%2s\n",
+      $label, $atno,$atname,$alt, $resname,$chainId, $resno, $iCode,
+        $u11, $u22, $u33, $u12, $u13, $u23, $element, $charge;
+
+} else {
+   print;
+}
