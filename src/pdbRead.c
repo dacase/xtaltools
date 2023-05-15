@@ -609,8 +609,8 @@ void ModPdbRA(pdb *w)
     w->atom_nums[i] = i;
   }
   for (i = 0; i < w->n_atoms; i++) {
-    w->atom_nums[i] = w->atom_nums[i] % 999999;
-    w->res_nums[i] = w->res_nums[i] % 9999;
+    w->atom_nums[i] = w->atom_nums[i] % 1000000;
+    w->res_nums[i] = w->res_nums[i] % 10000;
   }
 }
 

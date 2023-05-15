@@ -7,8 +7,8 @@ print "REMARK   select_alts run with seed of $ARGV[0]\n";
 
 #-----------------------------------------------------------------------
 # following is specfic to this particular system
-@repeats = (12..27,32..37,62..63,84..92,101..103,117..133,139..142,146);
-$residuesperchain = 450;
+@repeats = (276..278, 307..309);
+$residuesperchain = 1095;
 #-----------------------------------------------------------------------
 
 for $i (@repeats){ $repeat[$i] = 1; }
@@ -75,13 +75,18 @@ if( $_ =~ /^ATOM|^HETATM/){
     #  expand to 80+ characters (really hokey version):
     chop($_);
     $_ .= "                                                                    "; 
-    ( $label, $atno, $atname, $alt, $resname, $chainId, $resno1, $iCode,
+    ( $label, $atno1, $atname, $alt, $resname, $chainId, $resno1, $iCode,
           $x, $y, $z, $occ, $bfact, $element, $charge ) =
         unpack("a6 a5 x a4 a a3 x a a4 a x3 a8 a8 a8 a6 a6 x10 a2 a2",$_);
     $resno = int($resno1);
+    $atno = int($atno1);
 
     #  determine the relative residue number: only needed for repeats
-    $relres = $resno % $residuesperchain;
+    if( $atno > 39369 ){
+        $relres = ($resno + 10000) % $residuesperchain;
+    }else{
+        $relres = $resno % $residuesperchain;
+    }
 
     if( $resno != $resno_prev ){ 
        $rand = rand() unless defined $repeat[$relres];
