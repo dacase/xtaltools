@@ -1,0 +1,37 @@
+#!/bin/bash 
+
+#=============================================================================
+#    Running RISM
+#    (copy this script to your working directory, and edit it as needed.
+#
+#=============================================================================
+
+parm7=$1   
+rst7=$2
+xvv=$3   # xvv file for the solvent to be used
+
+export OMP_NUM_THREADS=16
+sander=/home/case/msander/bin/msander
+
+cat > mdin.rism <<EOF
+  single-point 3D-RISM calculation using the sander interface
+ &cntrl
+    ntx=1, nstlim=0, irism=1,
+ /
+ &rism
+    periodic='pme',
+    closure='kh','pse2','pse3'  tolerance=0.01,0.01,1e-7
+    grdspc=0.3,0.3,0.3,
+    mdiis_del=0.4, mdiis_nvec=20, maxstep=5000, mdiis_restart=50,
+    solvcut=9.0,
+    verbose=2, npropagate=0,
+    apply_rism_force=0,
+    volfmt='ccp4', ntwrism=1,
+ /
+EOF
+
+$sander -O -i mdin.rism -o ${rst7%%.*}.pse3.r3d \
+    -p $parm7 -c $rst7 -xvv $xvv -guv ${rst7%%.*}.pse3
+
+/bin/rm -f mdin.rism restrt mdinfo 
+
