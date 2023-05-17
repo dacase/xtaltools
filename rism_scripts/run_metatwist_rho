@@ -9,15 +9,15 @@ resolution=$2
 
 metatwist --dx $id.O.0.ccp4  --species O2-  --odx rho.O.0.ccp4  \
     --map rhoelreal --bulkdens 55.55 > metatwist.log
-#metatwist --dx $id.Na+.0.ccp4  --species Na+  --odx rho.Na+.0.ccp4  \
-#    --map rhoelreal --bulkdens 0.1 >> metatwist.log
-#metatwist --dx $id.Cl-.0.ccp4  --species Cl-  --odx rho.Cl-.0.ccp4  \
-#    --map rhoelreal --bulkdens 0.1 >> metatwist.log
+metatwist --dx $id.Na+.0.ccp4  --species Na+  --odx rho.Na+.0.ccp4  \
+    --map rhoelreal --bulkdens 0.1 >> metatwist.log
+metatwist --dx $id.Cl-.0.ccp4  --species Cl-  --odx rho.Cl-.0.ccp4  \
+    --map rhoelreal --bulkdens 0.1 >> metatwist.log
 
-#metatwist --dx rho.O.0.ccp4 rho.Na+.0.ccp4 rho.Cl-.0.ccp4 \
-#     --odx solvent.ccp4 --species none >> metatwist.log
+metatwist --dx rho.O.0.ccp4 rho.Na+.0.ccp4 rho.Cl-.0.ccp4 \
+     --odx solvent.ccp4 --species none >> metatwist.log
 
-mv rho.O.0.ccp4 solvent.ccp4
+# mv rho.O.0.ccp4 solvent.ccp4
 
 # ================== convert to proper axis order for SFALL
 mapmask mapin solvent.ccp4 mapout a.map <<EOF > metatwist.log

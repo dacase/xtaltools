@@ -15,6 +15,7 @@ themselves.
 * ensemble_scripts -- tools for creating supercell ensembles for MD/refinement
 * phenix_scipts  -- builds on phenix for miscellaneous manipulations
 * ccp4_scipts  -- builds on CCP4/refmac for miscellaneous manipulations
+* rism_scripts -- compute solvent densities using an intergral equation model
 
 # Installation
 

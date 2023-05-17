@@ -329,6 +329,45 @@ phenix.fmodel
 \end_layout
 
 \begin_layout Section
+rism_scripts
+\end_layout
+
+\begin_layout Description
+run_rism A simple script to run 3D-rism calcualtions (using the 
+\emph on
+msander
+\emph default
+ program) on a single snapshot.
+ Typical values for grid spacing, closure and solvent model are hard-wired
+ here, but you should edit this if you wish
+\end_layout
+
+\begin_layout Description
+run_metatwist_rho Takes the output from 
+\emph on
+run_rism
+\emph default
+ and computes an electron density map for the solvent.
+ This can be used to replace the 
+\begin_inset Quotes eld
+\end_inset
+
+flat
+\begin_inset Quotes erd
+\end_inset
+
+ bulk solvent density model in programs like 
+\emph on
+msander
+\emph default
+ or 
+\emph on
+refmac5
+\emph default
+.
+\end_layout
+
+\begin_layout Section
 ensemble_scripts
 \end_layout
 
@@ -337,7 +376,48 @@ These are scripts that are used to run ensemble refinements, where many
  complete copies of the macromolecule are present, generally arranged in
  a supercell.
  These are mainly useful as part of a bigger workflow, whose documentation
- is not yet ready....
+ is not yet ready.
+\end_layout
+
+\begin_layout Description
+find_alts output a listing of alternate conformations found in an input
+ pdb-file
+\end_layout
+
+\begin_layout Description
+select_alts this is the main script, that takes an input pdb file with alternate
+ conformations (for example, as found in the PDB).
+ For each chain, it randomly selects an alternate conformer for each residue,
+ based on its input occupation.
+ The output file sets all occupations to 1.0.
+ This is commonly used to create a starting model for ensemble refinement.
+\end_layout
+
+\begin_layout Description
+modify_pdb is a utility perl script for making all manner of modifications
+ to PDB files, at least that can be done on a line-by-line basis.
+ The scripts reads an input PDB file, makes whatever changes are coded in
+ an intermediate section, and writes out the result.
+ 
+\end_layout
+
+\begin_layout Description
+modify_frac is a variant of modify_pdb that allows modification based on
+ fractional coordinates, useful for repacking coordinates into a single
+ unit cell, and so on.
+\end_layout
+
+\begin_layout Description
+collapse_pdb takes an ensemble model and converts it into a more standard
+ 
+\begin_inset Quotes eld
+\end_inset
+
+alternate conformer
+\begin_inset Quotes erd
+\end_inset
+
+ model
 \end_layout
 
 \begin_layout Section

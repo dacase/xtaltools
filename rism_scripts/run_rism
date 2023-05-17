@@ -21,12 +21,12 @@ cat > mdin.rism <<EOF
  &rism
     periodic='pme',
     closure='kh','pse2','pse3'  tolerance=0.01,0.01,1e-7
-    grdspc=0.3,0.3,0.3,
+    grdspc=0.6,0.6,0.6,
     mdiis_del=0.4, mdiis_nvec=20, maxstep=5000, mdiis_restart=50,
     solvcut=9.0,
     verbose=2, npropagate=0,
     apply_rism_force=0,
-    volfmt='ccp4', ntwrism=1,
+    volfmt='mrc', ntwrism=1,
  /
 EOF
 
