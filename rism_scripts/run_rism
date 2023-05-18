@@ -10,7 +10,7 @@ parm7=$1
 rst7=$2
 xvv=$3   # xvv file for the solvent to be used
 
-export OMP_NUM_THREADS=16
+export OMP_NUM_THREADS=25
 sander=/home/case/msander/bin/msander
 
 cat > mdin.rism <<EOF
@@ -21,7 +21,7 @@ cat > mdin.rism <<EOF
  &rism
     periodic='pme',
     closure='kh','pse2','pse3'  tolerance=0.01,0.01,1e-7
-    grdspc=0.6,0.6,0.6,
+    grdspc=0.5,0.5,0.5,
     mdiis_del=0.4, mdiis_nvec=20, maxstep=5000, mdiis_restart=50,
     solvcut=9.0,
     verbose=2, npropagate=0,
