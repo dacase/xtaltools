@@ -51,7 +51,7 @@ parmout foo.parm7
 go
 EOF
 
-$MSANDERHOME/bin/add_pdb -i foo.parm7 -p ${id}.pdb -o foo2.parm7 >> $id-prep.log \
+$MSANDERHOME/bin/add_pdb -i foo.parm7 -p ${id}_uc.pdb -o foo2.parm7 >> $id-prep.log \
      || { echo "  add_pdb: Program error"; exit 1; }
 
 $MSANDERHOME/bin/add_xray -i foo2.parm7 -o ${id}_uc.parm7 >> $id-prep.log \
