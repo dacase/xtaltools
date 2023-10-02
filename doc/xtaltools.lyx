@@ -281,7 +281,33 @@ phenix_scripts
 \end_layout
 
 \begin_layout Description
-XrayPrep
+XrayPrep This script currently has two parts, which can be run together,
+ or separately.
+ The first part uses the 
+\emph on
+phenix.AmberPrep
+\emph default
+ script to prepare an input pdb-format file for use in refinement.
+ It usually works well, but is limited in its ability to handle unusual
+ situations, such as post-translational modifications, etc.
+ See the 
+\emph on
+run_alt_tleap
+\emph default
+ script below for a more flexible alternative.
+ The second part of the script takes an 
+\emph on
+xxx-sf-cif
+\emph default
+ file from the PDB, and converts the information into files needed for amber-bas
+ed refinement.
+ This uses 
+\emph on
+phenix.refine
+\emph default
+ to do conversions, reject outliers, possible convert intensities to structure
+ factors, expand to P1 symmetry, and so on.
+ (Going forward, I will probably remove the first part of this script.)
 \end_layout
 
 \begin_layout Description
@@ -339,7 +365,7 @@ msander
 \emph default
  program) on a single snapshot.
  Typical values for grid spacing, closure and solvent model are hard-wired
- here, but you should edit this if you wish
+ here, but you should edit this if you wish to make changes.
 \end_layout
 
 \begin_layout Description
@@ -421,6 +447,28 @@ alternate conformer
 \end_layout
 
 \begin_layout Section
+XtalAnalyze scripts
+\end_layout
+
+\begin_layout Standard
+This is a set of scripts created by Pawel Janowski some years ago.
+ The main current documentation is in the 
+\emph on
+README
+\emph default
+, 
+\emph on
+XtalAnalyze.sh
+\emph default
+ and 
+\emph on
+XtalPlot.sh
+\emph default
+ files.
+ Read these for now to see how to run things.
+\end_layout
+
+\begin_layout Section
 Setting up crystal simulations
 \begin_inset CommandInset label
 LatexCommand label
@@ -429,6 +477,15 @@ name "sec:crystals"
 \end_inset
 
 
+\end_layout
+
+\begin_layout Standard
+(The scripts described here (using the original documentation from Dave
+ Cerutti) are in the 
+\emph on
+src
+\emph default
+ folder.)
 \end_layout
 
 \begin_layout Standard
