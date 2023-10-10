@@ -3,17 +3,33 @@
 
 CC = gcc
 CFLAGS = -g -O3 -Wno-unused-result
+FC = gfortran
+FFLAGS = -g -O3
 LDFLAGS = 
 BINDIR = .
+
+.SUFFIXES : .c .F90 .o
 
 .c.o:
 	@echo "[XTALUTIL]  CC $<"
 	@$(CC) -c $(CFLAGS) -o $@ $< 
 
+.F90.o:
+	@echo "[XTALUTIL]  FC $<"
+	@$(FC) -c $(FFLAGS) -o $@ $< 
+
 OBJS = crdmanip.o grid.o matrix.o pdbRead.o rand2.o topRead.o vector.o
 
+AOBJ=   ambpdb.o forFIRSTtype.o forFIRSTbond.o forFIRSThbond.o \
+        forFIRSTteth.o forFIRSToutp.o forFIRSTsugar.o nxtsec.o \
+        amopen.o mexit.o
+
 xtalutil: $(BINDIR)/ChBox $(BINDIR)/UnitCell \
-     $(BINDIR)/AddToBox $(BINDIR)/PropPDB
+     $(BINDIR)/AddToBox $(BINDIR)/PropPDB $(BINDIR)/ambpdb
+
+$(BINDIR)/ambpdb: $(AOBJ)
+	@echo "[XTALUTIL]  FC $@"
+	@$(FC) $(FFLAGS) $(LDFLAGS) -o $@ $(AOBJ)
 
 $(BINDIR)/AddToBox: AddToBox.o $(OBJS)
 	@echo "[XTALUTIL]  CC $@"
