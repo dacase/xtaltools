@@ -25,12 +25,14 @@ AXIS Z X Y
 EOF
 
 # =================== run SFALL
-sfall mapin a.map hklout sfalled.mtz <<EOF >> metatwist.log
+sfall mapin a.map hklout sfalled.mtz memsize 10000000 <<EOF >> metatwist.log
 mode sfcalc mapin
 RESO $resolution
 EOF
 
 # ==================== convert to rdb file to merge with an sf-dat file:
-phenix.mtz.dump -f s -c sfalled.mtz | tr ',' '\t' > sfalled.fmtz
+phenix.mtz.dump -f s -c sfalled.mtz | tr ',' '\t' | \
+   sed 's/H\tK\tL\tFC\tPHIC/H\tK\tL\tFC\tPHIC\n5N\t5N\t5N\t15N\t15N/' \
+   > sfalled.fmtz
 
 /bin/rm -f sfalled.mtz a.map rho.*.mrc  
