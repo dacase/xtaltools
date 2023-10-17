@@ -104,7 +104,7 @@ int main(int argc, char* argv[])
        "             added.\n"
        "          (Default 0 ; any other setting activates recursion)\n"
        "  -path : Path for AddToBox program on subsequent calls\n"
-       "          (default ${MSANDERHOME}/bin/AddToBox)\n\n");
+       "          (default /home/case/xtaltools/src/AddToBox)\n\n");
     exit(1);
   }
 
@@ -116,7 +116,7 @@ int main(int argc, char* argv[])
   c.source[0] = '\0';
   a.source[0] = '\0';
   o.source[0] = '\0';
-  sprintf(a2bpath, "${MSANDERHOME}/bin/AddToBox");
+  sprintf(a2bpath, "/home/case/xtaltools/src/AddToBox");
   RW = 1.0;
   RP = 5.0;
   RCS = 0;
