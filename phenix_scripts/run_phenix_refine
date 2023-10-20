@@ -1,23 +1,16 @@
 #!/bin/bash
 
-label=$1
-pdb=$2
-mtz=$3
-cif=$4
+prefix=$1
+serial=$2
+pdb=$1
+mtz=$2
+prefix=$3
+serial=$4
+cif=$5
 
 cat <<EOF > cdl.eff
 refinement {
-  input {
-    xray_data {
-      outliers_rejection = True
-      r_free_flags {
-        generate = False
-      }
-    }
-  }
   output {
-    prefix = "$1"
-    serial = 1
     write_eff_file = False
     write_geo_file = False
     write_def_file = False
@@ -26,7 +19,7 @@ refinement {
     export_final_f_model = False
   }
   refine {
-    strategy = *individual_sites individual_sites_real_space rigid_body \
+    strategy = individual_sites individual_sites_real_space rigid_body \
                *individual_adp group_adp tls occupancies group_anomalous
     sites {
     }
@@ -63,8 +56,13 @@ refinement {
     skip_kinemage = True
   }
 }
+output {
+  prefix = "$prefix"
+  serial = "$serial"
+  overwrite = True
+}
 EOF
 
-phenix.refine  $pdb $mtz $cif cdl.eff --overwrite
+phenix.refine  $pdb $mtz $cif cdl.eff 
 
 /bin/rm -f cdl.eff 
