@@ -786,19 +786,6 @@ subroutine genpdb(natom,nres,coords,igraph,ipres,lbres,ititl,nf,arg1, &
                atnam(1:4) = tmpnam(1:4)
             endif
             
-            ! --- Special fixes where old Amber nucleic acid atom names differ from
-            ! version 3 pdb names:
-            ! (N.B.: this little section is no longer necessary if ff10 is used)
-            if (atnam(1:4) .eq. 'H5''1') atnam(1:4) = ' H5'''
-            if (atnam(1:4) .eq. 'H5''2') atnam(1:4) = 'H5'''''
-            if (atnam(1:4) .eq. 'H2''1') atnam(1:4) = ' H2'''
-            if (atnam(1:4) .eq. 'H2''2') atnam(1:4) = 'H2'''''
-            if (atnam(1:4) .eq. ' O1P') atnam(1:4) = ' OP1'
-            if (atnam(1:4) .eq. ' O2P') atnam(1:4) = ' OP2' 
-            if (atnam(1:4) .eq. ' H5T') atnam(1:4) = 'HO5'''
-            if (atnam(1:4) .eq. ' H3T') atnam(1:4) = 'HO3'''
-            if (atnam(1:4) .eq. 'HO''2') atnam(1:4) = 'HO2'''
-            
             ! --- Now, special case out the two-character element names:
             if (atnam(1:4) .eq. ' Na+' .or. atnam(1:4) .eq. ' NA+' .or. &
                 atnam(1:3) .eq. ' Fe' .or. atnam(1:3) .eq. ' FE' .or. &
