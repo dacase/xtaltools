@@ -1,11 +1,8 @@
 #!/bin/bash 
-
 #=============================================================================
 #    Running RISM
 #    (copy this script to your working directory, and edit it as needed.
-#
 #=============================================================================
-
 parm7=$1   
 rst7=$2
 xvv=$3   # xvv file for the solvent to be used
