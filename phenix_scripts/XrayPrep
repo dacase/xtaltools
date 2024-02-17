@@ -21,7 +21,7 @@ echo "XrayPrep log file for id $id" > $id-prep.log
 ciffiles=$2
 spacegroup=$3
 
-if true; then
+if false; then
 #============================================================================
 echo "Running phenix.AmberPrep" 
 phenix.AmberPrep $id.pdb use_reduce=False use_amber_library=False >> $id-prep.log \
@@ -62,7 +62,7 @@ fi
 
 /bin/rm -f foo.parm7 foo2.parm7  parmed
 
-if false; then
+if true; then
 #============================================================================
 echo "Making input mtz file"
 phenix.cif_as_mtz $id-sf.cif  >> $id-prep.log \
@@ -152,10 +152,11 @@ phenix.refine  \
 fi
 
 #============================================================================
-echo "Done. Created 6 files:"
-echo "   ${id}_uc.parm7        Use this as the Amber prmtop file"
-echo "   ${id}_uc.rst7         Starting coordinates in Amber restrt format"
-echo "   ${id}_uc.pdb          Use as pdb_infile"
+# echo "Done. Created 6 files:"
+# echo "   ${id}_uc.parm7        Use this as the Amber prmtop file"
+# echo "   ${id}_uc.rst7         Starting coordinates in Amber restrt format"
+# echo "   ${id}_uc.pdb          Use as pdb_infile"
+echo "Done. Created 3 files:"
 echo "   ${id}-sf.dat          Use as reflections_infile"
 if [ "x$spacegroup" != "xP1" ]; then
    echo "   ${id}-P1-sf.dat       Use as alternate reflections_infile"
