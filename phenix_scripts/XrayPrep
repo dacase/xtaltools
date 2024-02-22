@@ -1,15 +1,7 @@
 #!/bin/bash
 
-#  prepare Amber and structure factor files needed for crystallogrphic
-#  refinements using phenix_amber or the msander programs.
-#
-#    phenix_amber is an option inside phenix.refine to use a force field
-#       description instead of Engh-Huber-type distance and angle restraints
-#       to constrain the geometry.
-#
-#    msander does much the same thing, but uses Amber MD code (including
-#       GPU acceleration) to carry out much of the refinement.  This 
-#       program is available at https://github.com/dacase/msander.git.
+#  prepare structure factor files needed for crystallogrphic
+#  refinements using msander.
 #
 #  First input is the pdb-identifier: code assumes that $1-sf.cif
 #      and $1.pdb are  available in the current directory
@@ -21,48 +13,6 @@ echo "XrayPrep log file for id $id" > $id-prep.log
 ciffiles=$2
 spacegroup=$3
 
-if false; then
-#============================================================================
-echo "Running phenix.AmberPrep" 
-phenix.AmberPrep $id.pdb use_reduce=False use_amber_library=False >> $id-prep.log \
-     || { echo "  phenix.AmberPrep:  Program error"; exit 1; }
-
-/bin/mv 4amber_$id.order ${id}_uc.order
-
-#============================================================================
-echo "creating ${id}_uc.parm7"
-# create an interactive parmed script (when run from phenix.python, will
-#       have the correct PYTHONPATH)
-cat <<EOF > parmed
-import os
-import sys
-from parmed.scripts import clapp
-clapp()
-EOF
-
-/bin/rm -f ${id}_uc.parm7 foo1.parm7 foo.parm7
-
-phenix.python ./parmed -n <<EOF >> $id-prep.log \
-     || { echo "  parmed:   Program error"; exit 1; }
-parm 4amber_$id.prmtop
-lmod
-HMassRepartition
-parmout foo.parm7
-go
-EOF
-
-$MSANDERHOME/bin/add_pdb -i foo.parm7 -p ${id}_uc.pdb -o foo2.parm7 >> $id-prep.log \
-     || { echo "  add_pdb: Program error"; exit 1; }
-
-$MSANDERHOME/bin/add_xray -i foo2.parm7 -o ${id}_uc.parm7 >> $id-prep.log \
-     || { echo "  add_xray: Program error"; exit 1; }
-
-/bin/mv 4amber_$id.rst7 ${id}_uc.rst7
-fi
-
-/bin/rm -f foo.parm7 foo2.parm7  parmed
-
-if true; then
 #============================================================================
 echo "Making input mtz file"
 phenix.cif_as_mtz $id-sf.cif  >> $id-prep.log \
@@ -134,28 +84,8 @@ LABIN E1=F-obs-filtered E2=SIGF-obs-filtered E3=R-free-flags
 LABOUT E1=FOBS E2=SIGFOBS E3=R-free-flags
 EOF
 
-fi
 
 #============================================================================
-if false; then
-echo "Running zero-cycle phenix.refine on P1-expanded structure:"
-
-$MSANDERHOME/bin/ambpdb -p ${id}_uc.parm7 -ext -bres < ${id}_uc.rst7 > tmp.pdb
-
-phenix.refine  \
-   tmp.pdb $id-P1.mtz $ciffiles \
-   refinement.main.number_of_macro_cycles=0 \
-   output.write_model_cif_file=False output.write_map_coefficients=False \
-   prefix=cdl serial=2 \
-   write_geo=False cdl=True --overwrite >> $id-prep.log \
-     || { echo "  phenix.refine:  Program error"; exit 1; }
-fi
-
-#============================================================================
-# echo "Done. Created 6 files:"
-# echo "   ${id}_uc.parm7        Use this as the Amber prmtop file"
-# echo "   ${id}_uc.rst7         Starting coordinates in Amber restrt format"
-# echo "   ${id}_uc.pdb          Use as pdb_infile"
 echo "Done. Created 3 files:"
 echo "   ${id}-sf.dat          Use as reflections_infile"
 if [ "x$spacegroup" != "xP1" ]; then
@@ -165,5 +95,4 @@ echo "   ${id}-prep.log        Log file: examine this if problems arise"
 
 #============================================================================
 # clean up
-/bin/rm -f tmp* $id-sf.mtz cdl_data.mtz $id.fmtz $id-P1.fmtz parmed \
-     cdl_00* foo*.parm7 build_uc 4amber_$id.prmtop
+/bin/rm -f tmp* $id-sf.mtz cdl_data.mtz $id.fmtz $id-P1.fmtz cdl_00* 
