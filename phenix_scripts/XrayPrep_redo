@@ -18,8 +18,6 @@ phenix.reflection_file_converter ${id}_final.mtz --expand_to_p1 \
     --label="FP,SIGFP" --generate_r_free_flags \
     --r_free_flags_format=ccp4  --mtz=tmp-P1.mtz >> $id-prep.log
 
-exit
-
 #  convert to formatted file:
 phenix.mtz.dump -c -f s tmp-P1.mtz  | tr ',' '\t' > $id-P1.fmtz \
      || { echo "  phenix.mtz.dump:  Program error"; exit 1; }
