@@ -8,8 +8,9 @@
 #    to illustrate the ideas. There is next to no error checking.)
 #=============================================================================
 
-id=$1    # identifier for this calculation
-         # inputs: $id.parm7, $id.rst7, $id.pdb
+idp=$1
+id=$2    # identifier for this calculation
+         # inputs: $idp.parm7, $id.min1.x, $id.pdb
 
 thresh=0.5  # threshold for including explicit waters at the centers
             # of negative Laplacian regions.  These will be in order
@@ -43,7 +44,7 @@ cat > mdin.rism <<EOF
  &rism
     periodic='pme',
     closure='kh', tolerance=1e-6,
-    grdspc=0.35,0.35,0.35, centering=0,
+    grdspc=0.35,0.35,0.35,
     mdiis_del=0.4, mdiis_nvec=20, maxstep=5000, mdiis_restart=50,
     solvcut=9.0,
     verbose=2, npropagate=0,
@@ -52,8 +53,9 @@ cat > mdin.rism <<EOF
  /
 EOF
 
-sander -O -i mdin.rism -o $id.kh.r3d \
-    -p $id.parm7 -c $id.rst7 -xvv cSPCE_kh.xvv -guv $id.kh
+export OMP_NUM_THREADS=20
+msander -O -i mdin.rism -o $id.kh.r3d \
+    -p $idp.parm7 -c $id.min1.x -xvv cSPCE_kh.xvv -guv $id.kh
 
 /bin/rm -f mdin.rism restrt mdinfo $id.kh.H1.0.dx
 
@@ -63,23 +65,27 @@ fi
 # 2.  Run metatwist to to a Lapacian analysis on the oxygen distribution:
 #---------------------------------------------------------------------------
 
-metatwist --dx $id.kh.O.0.mrc --species O  \
+/home/case/amber24/bin/metatwist --dx $id.kh.O.0.mrc --species O  \
      --convolve 4 --sigma 1.0 --odx $id.kh.O.mrc > $id.lp
 
 #---------------------------------------------------------------------------
 # 3.  Place water molecules at the centers of the negative Laplacians:
 #---------------------------------------------------------------------------
 
-metatwist --dx $id.kh.O.0.mrc \
+/home/case/amber24/bin/metatwist --dx $id.kh.O.0.mrc \
       --ldx $id.kh.O.mrc --map blobsper \
       --species O WAT --bulk 55.55 --threshold $thresh  > $id.blobs 
 
-grep -v TER $id.kh.O.0-$id.kh.O-blobs-centroid.pdb > wats.pdb
+sort -k10nr $id.kh.O.0-$id.kh.O-blobs-centroid.pdb > wats.pdb
+sed 's/^END/TER/' $id.pdb > $id.wat.pdb
 
 # ===== Add hydrogens using gwh
 
-sed 's/END/TER/' $id.pdb > $id.wat.pdb
-gwh -p $id.parm7 -w wats.pdb < $id.amber.pdb >> $id.wat.pdb 2>> $id.blobs
+# /home/case/amber24/bin/gwh -p $idp.parm7 -w wats.pdb < $id.pdb >> $id.wat.pdb 2>> $id.blobs
   
+# simpler: just concatenate wats (without hydrogens)
+cat wats.pdb >> $id.wat.pdb
 
-/bin/rm -f $id..kh.O.0-convolut* convolu*
+
+/bin/rm -f $id..kh.O.0-convolut* convolu* \
+   $id.kh.O.0-$id.kh.O-blobs-centroid.pdb $id.kh.O.0-$id.kh.O-blobs-mean.pdb
