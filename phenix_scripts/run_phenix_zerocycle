@@ -1,9 +1,9 @@
 #!/bin/bash
 
-prefix=2ol9_deposit
-serial=0
-pdb=2ol9.pdb
-mtz=2ol9.mtz
+prefix=5whp_final
+serial=6
+pdb=alt1_006.pdb
+mtz=alt1.mtz
 
 cat <<EOF > cdl.eff
 refinement {
