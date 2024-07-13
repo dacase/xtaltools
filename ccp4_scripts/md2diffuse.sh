@@ -1,9 +1,17 @@
 #!/bin/bash
 
-#  Overview of workflow to take MD snapshots and compute diffuse and Bragg
+#  Overview of workflow to use MD snapshots to compute diffuse and Bragg
 #    scattering.  Output is an mtz file (or formatted analog) containing
 #    Bragg and diffuse scattering intensities.  An average electron density
 #    map can also be created.
+
+#  Basically, all of the input pdb-format files are fed to sfall to get
+#    computed structure factors.  The remaining steps just process the
+#    output mtz files, with an eye to minimizing disk storage.
+
+#    (I generally remove files in the $pdbprefix and save_hkl folders
+#    once I am done, since the input pdb files, and output mtz files,
+#    can take up a *lot* of space for large problems.)
 
 #  This script requires ccp4 programs to be in the PATH: sfall, f2mtz,
 #    fft, cad, mtzdump.  It also requires a set of PDB-format files
@@ -14,24 +22,38 @@
 #    working directory, and edited and run there.  Each major section is
 #    enclosed in an "if" block, since one will often want to run things
 #    step by step.  Keeping the edited version of this script around provdes
-#    a record of what was done.
+#    a record of what was done.  (In this master version, all the if blocks
+#    start with "if false; then"; you need to change some or all of these
+#    to "if true; then" to actually do anything.
 
+#  Comments or problems: send email to dacase1@gmail.com, or (better)
+#    create an issue at github.com/dacase/xtaltools.
+
+#=============================================================================
 #  Input variables: edit these to match your problem:
 
 pdbprefix="../PDBdata/lys_ortho"     # pdbfiles will be called
                                       # $pdbprefix.$frame.pdb
 dprefix="lys_ortho"                  # basename for final output files
+numframes=2500                       # number of pdb-format snapshots
+
 cell="CRYST1   30.490   56.385   73.824  90.00  90.00  90.00 P 21 21 21    4\n"
                                 # should take this from the first pdb file
 title="Diffuse/Bragg for lys_ortho"  # for mtz and map files
 vf000=""                              # cell volume and number of electrons
 grid=""                               # grid dimensions for final map
                                       # (see step 7 for vf000 and grid)
-resolution=1.12
-resolutionm=1.05
+
+resolution=1.12                   # high resolution limit for output
+let resolutionm=$resolution-0.1   # give a slightly better resolution to
+                                  # sfall to esure that no hkl points get
+                                  # omitted
+
+#  (You will also need to edit Step 1 below if you plan to use cpptraj
+#     from AmberTools to prepare the input PDB files.)
 
 #=============================================================================
-#  1.  Run cpptraj to prepare PDB files
+#  Step 1.  Run cpptraj to prepare PDB files
 
 if false; then
 
@@ -61,7 +83,7 @@ fi
 # each of the above snapshots (if desired.)
 
 #=============================================================================
-#  2.  Get a reference mtz file so each frame can have the same hkl values:
+# Step  2. Get a reference mtz file so each frame can have the same hkl values:
 
 if false; then
 
@@ -109,7 +131,7 @@ EOF
 fi
 
 #=============================================================================
-#  3.  On each frame, run sfall to get structure factors:
+#  Step 3.  On each frame, run sfall to get structure factors:
 
 if false; then
 
@@ -213,7 +235,7 @@ gcc -std=gnu99  -o mtz2fcphic mtz2fcphic.c
 
 #  Loop over input files:
 
-for frame in {1..2500}; do
+for frame in {1..$numframes}; do
 
 #  set all b-factors to 15:
 ./modify_pdb < ${pdbprefix}.$frame.pdb > $frame.pdb
@@ -242,7 +264,7 @@ done
 fi
 
 #=============================================================================
-#  4.  Run the "diffuse1" program to compute block averages:
+#  Step 4.  Run the "diffuse1" program to compute block averages:
 
 if false; then
 
@@ -364,16 +386,20 @@ EOF
 
 gcc -std=gnu99  -O3 -o diffuse1 diffuse1.c -lm
 
-./diffuse1 1 2500 1 frame1.mtz  > $dprefix.1.ihklb
+# (This example just computes a single block average, over all frames.
+# But the diffuse1 program could be run over subsets of the data, in order
+#   look at block averages.)
+
+./diffuse1 1 $numframes 1 frame1.mtz  > $dprefix.1.ihklb
 
 /bin/rm -f diffuse1 diffuse1.c
 
 fi
 
 #=============================================================================
-#  5.  combine (if needed) several intermediate .ihkl files into a total:
+#  Step 5.  combine (if needed) several intermediate .ihkl files into a total:
 
-if true; then
+if false; then
 
 cat <<EOF > diffuse2.c
 #include <stdlib.h>
@@ -511,13 +537,17 @@ int main( int argc, char** argv )
 EOF
 gcc -std=gnu99  -O -o diffuse2 diffuse2.c -lm
 
+#  (Again, the following line assumes a single "block" that includes all
+#  frames.  Modify the following line if you created several ihklb files
+#  in the previous step.)
+
 ./diffuse2 frame1.hkl $dprefix.1.ihklb > $dprefix.1.dhkl
 
 /bin/rm -f diffuse2 diffuse2.c
 
 fi
 #=============================================================================
-#  6.  convert the .dhkl file above to mtz:
+#  Step 6.  convert the .dhkl file above to mtz:
 
 if false; then
 
@@ -534,7 +564,9 @@ EOF
 fi
 
 #=============================================================================
-#  7.  Also get an average map file
+#  Step 7.  (Optional): Also get an average map file.  (You need to
+#     know how to run the ccp4 "fft" program in order to set the VF000
+#     and GRID variables.)
 
 if false; then 
 
