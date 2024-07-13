@@ -1,0 +1,83 @@
+input_files {
+  map_model {
+    full_map = None
+    half_map = None
+    model = None
+  }
+  xray_data = ../XrayPrep/7kr0.mtz
+  xray_data_labels = None
+  free_r_labels = None
+  free_r_flag_value = 0
+  ncs_file = None
+  map_coeffs = None
+  map_coeffs_virtual = None
+  map_coeffs_labels = None
+  alt_models = None
+}
+output {
+  alt_conf_model = default
+  overwrite = True
+  file_name = 7kr0_alt.pdb
+  filename = 7kr0_alt.pdb
+  serial = None
+  temp_dir = TEMP_CREATE_ALT_CONF
+  prefix = None
+  suffix = None
+  serial_format = "%03d"
+  target_output_format = None *pdb mmcif
+}
+alt_confs {
+  cycles = 4
+  use_existing_altlocs = False
+  sift_and_rename_waters_only = False
+  water_and_hydrogens = *at_end always never
+  recycle_water = False
+  max_allowed_residual = 1
+  max_rotamers_to_consider = None
+  min_rotamer_rmsd = 0.25
+  conformers = 2
+  pool_size = 32
+  mask_at_large_diffs = False
+  score_confidence_ratio = 2.
+  use_edited_model = True
+  rebuild_main_chain = False
+  diff_map_resolution = 2
+  macro_cycles = 3
+  water_and_h_macro_cycles = 5
+  rsr_macro_cycles = 3
+  mask_atoms_atom_radius = 6
+  large_rmsd = 0.5
+  minimum_patterns = 4
+  group_length = 3
+  domain_size = 200
+  n_swap = 1
+  alt_labels = ABCDEFGHIJKLMNOPQRSTUVWXYZ
+  geometry_score_type = magnitudes gradients residue_score \
+                        magnitudes_by_chain gradients_by_chain \
+                        *residue_score_by_chain
+  correlated_errors = True
+  geometry_mean_or_min = *mean min
+  clash_weight = 0
+  allow_close = NO ON OO NN
+  close_dist = 2.8
+  other_dist = 4.0
+}
+crystal_info {
+  resolution = 0.77
+  wrapping = None
+  scattering_table = *n_gaussian wk1995 it1992 electron neutron
+  chain_type = None *PROTEIN RNA DNA
+}
+control {
+  multiprocessing = *multiprocessing sge lsf pbs condor pbspro slurm
+  queue_run_command = None
+  nproc = 4
+  use_existing_files = False
+  random_seed = 771914
+  verbose = False
+  clean_up = True
+}
+job_title = None
+gui {
+  output_dir = None
+}
