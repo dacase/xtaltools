@@ -1,3 +1,9 @@
+# WARNING
+
+This repository was merged with https://github.com/dacase/AmberClassic in
+late 2024.  I will leave this repo here for a few months, but it will be
+removed in early 2025.
+
 # XtalTools Overview
 
 This directory tree contains various scripts to manipulate periodic
